@@ -74,7 +74,21 @@ public class SuggesterTest extends SolrTestCaseJ4 {
         "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/arr[@name='suggestion']/str[2][.='accommodate']"
     );
   }
-  
+
+  @Test
+  public void testExtendedResultsSuggestions() throws Exception {
+    addDocs();
+    assertU(commit()); // configured to do a rebuild on commit
+
+    assertQ(req("qt", requestUri, "q", "ac", SpellingParams.SPELLCHECK_COUNT, "2", SpellingParams.SPELLCHECK_ONLY_MORE_POPULAR, "true", SpellingParams.SPELLCHECK_EXTENDED_RESULTS, "true"),
+        "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/int[@name='numFound'][.='2']",
+        "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/arr[@name='suggestion']/lst[1]/str[1][.='acquire']",
+        "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/arr[@name='suggestion']/lst[1]/int[1]",
+        "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/arr[@name='suggestion']/lst[2]/str[1][.='accommodate']",
+        "//lst[@name='spellcheck']/lst[@name='suggestions']/lst[@name='ac']/arr[@name='suggestion']/lst[2]/int[1]"
+    );
+  }
+
   @Test
   public void testReload() throws Exception {
     String leaveData = System.getProperty("solr.test.leavedatadir");

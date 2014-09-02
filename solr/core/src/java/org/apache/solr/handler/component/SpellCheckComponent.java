@@ -601,7 +601,9 @@ public class SpellCheckComponent extends SearchComponent implements SolrCoreAwar
         if (extendedResults && hasFreqInfo) {
           suggestionList.add("origFreq", spellingResult
               .getTokenFrequency(inputToken));
-          
+        }
+
+        if (extendedResults) {
           ArrayList<SimpleOrderedMap> sugs = new ArrayList<>();
           suggestionList.add("suggestion", sugs);
           for (Map.Entry<String,Integer> suggEntry : theSuggestions.entrySet()) {
